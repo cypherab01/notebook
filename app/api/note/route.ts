@@ -5,13 +5,41 @@ import { Types } from "mongoose";
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
+// get a single note
 export const GET = async (request: Request) => {
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
     await connect();
-    const notes = await Note.find();
-    return new NextResponse(JSON.stringify(notes), { status: 200 });
+
+    if (!id) {
+      return new NextResponse(
+        JSON.stringify({ message: "Note ID not found." }),
+        { status: 400 }
+      );
+    }
+
+    if (!Types.ObjectId.isValid(id)) {
+      return new NextResponse(
+        JSON.stringify({ message: "Invalid Note ID passed." }),
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const note = await Note.findById(id);
+
+    if (!note) {
+      return new NextResponse(JSON.stringify({ message: "Note not found." }), {
+        status: 404,
+      });
+    }
+
+    return new NextResponse(JSON.stringify(note), { status: 200 });
   } catch (error) {
-    return new NextResponse("Error while fetching notes.");
+    return new NextResponse("Error while fetching note.", { status: 500 });
   }
 };
 

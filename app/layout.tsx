@@ -5,6 +5,7 @@ import { Ubuntu } from "next/font/google";
 import Navbar from "./(Navbar)/Navbar";
 import Footer from "./(Footer)/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import { NextAuthProvider } from "./Providers";
 
 const ubuntu = Ubuntu({
   weight: ["400", "700"],
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ubuntu.className} antialiased p-2 max-w-3xl mx-auto`}>
+        <NextAuthProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -39,6 +41,7 @@ export default function RootLayout({
             <Footer />
           </footer>
         </ThemeProvider>
+          </NextAuthProvider>
       </body>
     </html>
   );

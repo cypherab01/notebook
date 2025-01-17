@@ -2,7 +2,6 @@ import connect from "@/lib/db";
 import User from "@/lib/models/user";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
-import { signIn } from "next-auth/react";
 
 const authOptions = {
   providers: [
@@ -14,7 +13,7 @@ const authOptions = {
   callbacks: {
     async signIn({ user, account }: { user: any; account: any }) {
       if (account.provider === "google") {
-        const { email, name, image: imageurl } = user;
+        const { email, name, image } = user;
         await connect();
         const userExists = await User.findOne({ email });
 
@@ -24,11 +23,17 @@ const authOptions = {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, name, imageurl }),
+            body: JSON.stringify({ email, name, image }),
           });
 
           if (res.status === 201) {
             return user;
+          }
+        } else {
+          if (userExists.name !== name || userExists.image !== image) {
+            userExists.name = name;
+            userExists.image = image;
+            await userExists.save();
           }
         }
 

@@ -7,9 +7,26 @@ import { Types } from "mongoose";
 export const GET = async (request: Request) => {
   try {
     await connect();
-    const notes = await Note.find();
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get("q");
+    
+    // If no query provided, return all notes
+    if (!query) {
+      const notes = await Note.find();
+      return new NextResponse(JSON.stringify(notes), { status: 200 });
+    }
+    
+    // If query exists, return filtered notes by title or description
+    const notes = await Note.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { content: { $regex: query, $options: "i" } }
+      ]
+    });
     return new NextResponse(JSON.stringify(notes), { status: 200 });
   } catch (error) {
-    return new NextResponse("Error while fetching notes.");
+    return new NextResponse("Error while fetching notes.", { status: 500 });
   }
 };
+
+

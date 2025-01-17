@@ -1,6 +1,6 @@
 import { models, Schema, model } from "mongoose";
 
-const NoteSchema = new Schema(
+const noteSchema = new Schema(
     {
         title: { type: String, required: true },
         content: { type: String, required: true },
@@ -9,6 +9,6 @@ const NoteSchema = new Schema(
     { timestamps: true }
 );
 
-const Note = models.Note || model("Note", NoteSchema);
+const Note = models.Note || model("Note", noteSchema);
 
 export default Note;

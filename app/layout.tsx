@@ -26,22 +26,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${ubuntu.className} antialiased p-2 max-w-3xl mx-auto`}>
         <NextAuthProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <header className="py-4 mb-2">
-            <Navbar />
-          </header>
-          <main className="my-4">{children}</main>
-          <Toaster />
-          <footer>
-            <Footer />
-          </footer>
-        </ThemeProvider>
-          </NextAuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <header className="py-4 mb-2">
+              <Navbar />
+            </header>
+            <main className="my-4">{children}</main>
+            <Toaster />
+            <footer>
+              <Footer />
+            </footer>
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -1,32 +1,38 @@
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 import connect from "@/lib/db";
-import Note from "@/lib/models/note";
-import { NextResponse } from "next/server";
-import { Types } from "mongoose";
+import Note from "@/models/note.model";
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-// get all notes from database
-export const GET = async (request: Request) => {
+export const GET = async (request: NextRequest) => {
   try {
     await connect();
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get("q");
-    
-    // If no query provided, return all notes
-    if (!query) {
-      const notes = await Note.find();
-      return new NextResponse(JSON.stringify(notes), { status: 200 });
+    const token = request.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "Unauthorized access", data: [] },
+        { status: 401 }
+      );
     }
-    
-    // If query exists, return filtered notes by title or description
-    const notes = await Note.find({
-      $or: [
-        { title: { $regex: query, $options: "i" } },
-        { content: { $regex: query, $options: "i" } }
-      ]
-    });
-    return new NextResponse(JSON.stringify(notes), { status: 200 });
+
+    const userId = (
+      jwt.verify(token, process.env.TOKEN_SECRET!) as { id: string }
+    ).id;
+    const userNotes = await Note.find({ user: userId });
+
+    return NextResponse.json(
+      {
+        message: "Notes fetched successfully",
+        data: userNotes || [],
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    return new NextResponse("Error while fetching notes.", { status: 500 });
+    console.error("Error in notes route:", error);
+    return NextResponse.json(
+      { message: "Internal server error", data: [] },
+      { status: 500 }
+    );
   }
 };
-
-

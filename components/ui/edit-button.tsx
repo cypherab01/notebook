@@ -6,7 +6,7 @@ interface EditProps {
 
 const Edit: React.FC<EditProps> = ({ id }) => {
   return (
-    <Link href={`/edit/${id}`} id="edit">
+    <Link href={`/mynotes/${id}/edit`} id="edit">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

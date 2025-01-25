@@ -1,34 +1,34 @@
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface DeleteProps {
   id: string;
 }
 
 const Delete: React.FC<DeleteProps> = ({ id }) => {
-  const { toast } = useToast();
   const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
+    if (isDeleting) return;
+
+    setIsDeleting(true);
     try {
       const response = await fetch(`http://localhost:3000/api/note?id=${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
         console.log(`Deleted note with ID: ${id}`);
-        toast({
-          variant: "destructive",
-          title: "Note Deleted",
-          description: "I am lazy to implement undo delete, kindly sorry!",
-        });
-        router.push("/");
+        router.push("/mynotes");
       } else {
         console.error("Failed to delete the note.");
       }
     } catch (error) {
       console.error("Error while deleting the note:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -41,7 +41,9 @@ const Delete: React.FC<DeleteProps> = ({ id }) => {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-6 cursor-pointer"
+        className={`size-6 cursor-pointer ${
+          isDeleting ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
         <path
           strokeLinecap="round"

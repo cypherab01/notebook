@@ -1,14 +1,13 @@
-import NoteList from "@/components/NoteList";
-import { SearchNote } from "@/components/SearchNote";
+import { SignIn } from "@/components/auth/signin-button";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main>
-      <div className="flex flex-col-reverse items-start justify-between gap-2  sm:flex-row my-4">
-        <SearchNote />
-      </div>
-
-      <NoteList />
-    </main>
+    <div className="flex min-h-96 flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">Your Thoughts, Organized.</h1>
+      <p className="text-lg mb-8">
+        A simple and elegant way to keep track of your notes.
+      </p>
+      <SignIn />
+    </div>
   );
 }

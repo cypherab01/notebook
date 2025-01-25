@@ -4,6 +4,14 @@ import Delete from "@/components/ui/delete-button";
 import Edit from "@/components/ui/edit-button";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const mynotes = async () => {
   try {
@@ -12,11 +20,16 @@ const mynotes = async () => {
 
     if (!token) {
       return (
-        <div className="p-2 my-8 shadow-md rounded-sm hover:shadow-xl text-destructive">
-          <div className="flex items-center justify-center">
-            <h2 className="text-xl mb-2">Please login to view your notes</h2>
-          </div>
-        </div>
+        <Card className="mx-auto max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center text-destructive">
+              Authentication Required
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center">Please login to view your notes</p>
+          </CardContent>
+        </Card>
       );
     }
 
@@ -47,73 +60,79 @@ const mynotes = async () => {
     }
 
     return (
-      <ul>
-        <Link href={"mynotes/create"} className="text-blue-500">
-          Create Note
-        </Link>
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="flex justify-between items-start gap-4 md:gap-0 md:items-center flex-col md:flex-row">
+          <h1 className="text-3xl font-bold">My Notes</h1>
+          <Button asChild variant="default">
+            <Link href={"mynotes/create"}>Create Note</Link>
+          </Button>
+        </div>
+
         {noteLength === 0 ? (
-          <div className="flex items-center justify-start my-8">
-            <p>It's surprising to see you here, but no notes found.</p>
-          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-center text-muted-foreground">
+                No notes found. Create your first note to get started!
+              </p>
+            </CardContent>
+          </Card>
         ) : (
-          parsedNotes.map((note: any) => (
-            <li key={note._id}>
-              <div className="p-2 ring-1 ring-primary-foreground my-8 shadow-md rounded-sm hover:shadow-xl">
-                <div className="flex items-start justify-center flex-col ">
-                  <h2 className="text-xl mb-2">{note.title}</h2>
-                  <p>{note.content}</p>
-                  <div className="text-muted-foreground text-sm mt-4 flex items-start justify-center flex-col">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+            {parsedNotes.map((note: any) => (
+              <Card key={note._id} className="flex flex-col">
+                <CardHeader>
+                  <CardTitle>{note.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">{note.content}</p>
+                  <div className="mt-4 space-y-1 text-sm text-muted-foreground">
                     <p>
-                      Created on:{" "}
+                      Created:{" "}
                       {new Date(note.createdAt).toLocaleString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
+                        month: "short",
                         day: "numeric",
-                        hour: "2-digit",
+                        year: "numeric",
+                        hour: "numeric",
                         minute: "2-digit",
-                        second: "2-digit",
                         hour12: true,
                       })}
                     </p>
                     <p>
-                      Last updated on:{" "}
+                      Updated:{" "}
                       {new Date(note.updatedAt).toLocaleString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
+                        month: "short",
                         day: "numeric",
-                        hour: "2-digit",
+                        year: "numeric",
+                        hour: "numeric",
                         minute: "2-digit",
-                        second: "2-digit",
                         hour12: true,
                       })}
                     </p>
                   </div>
-                </div>
-                <div
-                  id="btns"
-                  className="flex items-center justify-end gap-4 my-4"
-                >
+                </CardContent>
+                <CardFooter className="flex justify-end gap-2 mt-auto select-none">
                   {note._id && <Edit id={note._id} />}
                   <Delete id={note._id} />
-                </div>
-              </div>
-            </li>
-          ))
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         )}
-      </ul>
+      </div>
     );
   } catch (error) {
     console.log("Error fetching notes", error);
     return (
-      <div className="p-2 my-8 shadow-md rounded-sm hover:shadow-xl text-destructive">
-        <div className="flex items-center justify-center">
-          <h2 className="text-xl mb-2">
-            Error fetching notes. Failed to connect to the database...
-          </h2>
-        </div>
-      </div>
+      <Card className="mx-auto max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center text-destructive">Error</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center">
+            Failed to connect to the database. Please try again later.
+          </p>
+        </CardContent>
+      </Card>
     );
   }
 };

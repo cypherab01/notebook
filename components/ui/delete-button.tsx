@@ -16,9 +16,12 @@ const Delete: React.FC<DeleteProps> = ({ id }) => {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/note?id=${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/note?id=${id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.ok) {
         console.log(`Deleted note with ID: ${id}`);
         router.push("/mynotes");

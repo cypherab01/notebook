@@ -17,10 +17,13 @@ export default function SignupPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/users/signup", {
-        method: "POST",
-        body: JSON.stringify({ username, email, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/users/signup`,
+        {
+          method: "POST",
+          body: JSON.stringify({ username, email, password }),
+        }
+      );
       const data = await response.json();
 
       if (data.error) {

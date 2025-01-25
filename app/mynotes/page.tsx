@@ -38,7 +38,7 @@ const mynotes = async () => {
     };
     const userId = decodedToken.id;
 
-    const res = await fetch(`${process.env.API_URL}/notes`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/notes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

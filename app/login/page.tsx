@@ -15,13 +15,16 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
       const data = await response.json();
       if (data.error) {
         toast.error(data.error);
@@ -91,6 +94,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex items-center justify-start">
+                {/* todo: add forgot password */}
                 <Link
                   href="/forgot-password"
                   className="text-sm font-medium text-primary hover:underline"

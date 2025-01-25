@@ -21,14 +21,17 @@ const CreateNote = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/note", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ title, content }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/note`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ title, content }),
+        }
+      );
 
       const data = await response.json();
 
@@ -38,6 +41,7 @@ const CreateNote = () => {
         setContent("");
         setTimeout(() => {
           router.push("/mynotes");
+          router.refresh();
         }, 1000);
       } else {
         toast.error(data.message || "Failed to create note");

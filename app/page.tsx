@@ -1,4 +1,5 @@
 import { SignIn } from "@/components/auth/signin-button";
+import Link from "next/link";
 
 export default async function Home() {
   return (
@@ -7,7 +8,15 @@ export default async function Home() {
       <p className="text-lg mb-8">
         A simple and elegant way to keep track of your notes.
       </p>
-      <SignIn />
+      <div className="flex gap-4">
+        <SignIn />
+        <Link
+          href={"/signup"}
+          className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold py-2 px-4 rounded"
+        >
+          Sign Up
+        </Link>
+      </div>
     </div>
   );
 }

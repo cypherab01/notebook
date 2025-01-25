@@ -20,14 +20,17 @@ const EditNote = ({ params }: { params: Promise<{ id: string }> }) => {
       const { id } = await params;
       setNoteId(id);
       try {
-        const res = await fetch(`http://localhost:3000/api/note?id=${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // This will send the cookies automatically
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/note?id=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // This will send the cookies automatically
+            cache: "no-store",
+          }
+        );
 
         const data = await res.json();
 
@@ -58,7 +61,7 @@ const EditNote = ({ params }: { params: Promise<{ id: string }> }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:3000/api/note?id=${noteId}`,
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/note?id=${noteId}`,
         {
           method: "PATCH",
           headers: {

@@ -1,4 +1,3 @@
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 import connect from "@/lib/db";
 import Note from "@/models/note.model";
 import { NextRequest, NextResponse } from "next/server";

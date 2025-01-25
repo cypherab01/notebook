@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     await connect();
     const reqBody = await request.json();
     const { email, password } = reqBody;
-    // console.log(reqBody);
 
     //check if user exists
     const user = await User.findOne({ email });
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    // console.log("user exists");
 
     //check if password is correct
     const validPassword = await bcryptjs.compare(password, user.password);
@@ -29,7 +27,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    // console.log(user);
 
     if (!user.isVerfied) {
       return NextResponse.json(

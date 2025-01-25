@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { username, email, password } = reqBody;
 
-    // console.log(reqBody);
-
     // Validate username
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]{2,19}$/;
     if (!usernameRegex.test(username)) {
@@ -84,7 +82,6 @@ export async function POST(request: NextRequest) {
     });
 
     const savedUser = await newUser.save();
-    // console.log(savedUser);
 
     //send verification email
     await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });

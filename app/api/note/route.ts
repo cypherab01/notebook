@@ -5,8 +5,6 @@ import { Types } from "mongoose";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import jwt from "jsonwebtoken";
 
-const ObjectId = require("mongoose").Types.ObjectId;
-
 export const GET = async (request: NextRequest) => {
   try {
     await connect();
@@ -139,7 +137,7 @@ export const PATCH = async (request: NextRequest) => {
     }
 
     const updatedNote = await Note.findOneAndUpdate(
-      { _id: new ObjectId(id), user: userId },
+      { _id: new Types.ObjectId(id), user: userId },
       { title: newTitle, content: newContent },
       { new: true }
     );
